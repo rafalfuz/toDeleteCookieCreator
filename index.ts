@@ -1,11 +1,13 @@
-const express = require('express');
-const cookieParser = require('cookie-parser');
-const hbs = require('express-handlebars');
-const {HomeRouter} = require("./routes/home");
-const {ConfiguratorRouter} = require("./routes/configurator");
-const {OrderRouter} = require("./routes/order");
-const {handlebarsHelpers} = require("./utils/handlebars-helpers");
-const {COOKIE_BASES, COOKIE_ADDONS} = require("./data/cookies-data");
+import * as express from 'express';
+import * as hbs from 'express-handlebars';
+import * as cookieParser from 'cookie-parser';
+import {HomeRouter} from './routes/home'
+import {ConfiguratorRouter} from "./routes/configurator";
+import {OrderRouter} from "./routes/order";
+import {handlebarsHelpers} from "./utils/handlebars-helpers";
+import {COOKIE_BASES, COOKIE_ADDONS} from "./data/cookies-data";
+
+
 
 class CookieMakerApp {
     constructor() {
@@ -16,7 +18,7 @@ class CookieMakerApp {
     }
 
     _configureApp() {
-        this.app = express();
+        const app = express();
 
         this.app.use(express.json());
         this.app.use(express.static('public'));
