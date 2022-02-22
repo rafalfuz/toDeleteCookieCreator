@@ -9,18 +9,18 @@ export class ConfiguratorRouter {
         this.setUpRoutes();
         }
 
-    setUpRoutes() {
+    setUpRoutes(): void {
         this.router.get('/select-base/:baseName', this.selectBase);
         this.router.get('/add-addon/:addonName', this.addAddon);
         this.router.get('/delete-addon/:addonName', this.deleteAddon);
     }
 
-    selectBase = (req: Request, res: Response) => {
+    selectBase = (req: Request, res: Response):void => {
         const {baseName} = req.params;
 
-        // if (!this.cmapp.data.COOKIE_BASES[baseName]) {
-        //     return this.cmapp.showErrorPage(res, `There is no such base as ${baseName}.`);
-        // }
+        if (!(this.cmapp.data.COOKIE_BASES as Record<string, number>)[baseName]) {
+            return this.cmapp.showErrorPage(res, `There is no such base as ${baseName}.`);
+        }
 
         res
             .cookie('cookieBase', baseName)
@@ -29,12 +29,12 @@ export class ConfiguratorRouter {
             });
     };
 
-    addAddon = (req: Request, res: Response) => {
+    addAddon = (req: Request, res: Response):void => {
         const {addonName} = req.params;
 
-        // if (!this.cmapp.data.COOKIE_ADDONS[addonName]) {
-        //     return this.cmapp.showErrorPage(res, `There is no such addon as ${addonName}.`);
-        // }
+        if (!(this.cmapp.data.COOKIE_ADDONS as Record<string, number>)[addonName]) {
+            return this.cmapp.showErrorPage(res, `There is no such addon as ${addonName}.`);
+        }
 
         const addons = this.cmapp.getAddonsFromReq(req);
 
@@ -51,7 +51,7 @@ export class ConfiguratorRouter {
             });
     };
 
-    deleteAddon = (req: Request, res: Response) => {
+    deleteAddon = (req: Request, res: Response): void => {
         const {addonName} = req.params;
 
         const oldAddons = this.cmapp.getAddonsFromReq(req);
@@ -60,10 +60,10 @@ export class ConfiguratorRouter {
             return this.cmapp.showErrorPage(res, `Cannot delete something that isn't already added to the cookie. ${addonName} not found on cookie.`);
         }
 
-        // const addons = oldAddons.filter(addon => addon !== addonName);
+        const addons = oldAddons.filter(addon => addon !== addonName);
 
         res
-            // .cookie('cookieAddons', JSON.stringify(addons))
+            .cookie('cookieAddons', JSON.stringify(addons))
             .render('configurator/deleted', {
                 addonName,
             });

@@ -7,16 +7,14 @@ export class HomeRouter {
     public readonly router: Router = Router();
 
     constructor(private cmapp:CookieMakerApp) {
-        this.cmapp = cmapp;
-        this.router = express.Router();
         this.setUpRoutes();
     }
 
-    setUpRoutes() {
+    private setUpRoutes() {
         this.router.get('/', this.home);
     }
 
-    home = (req:Request, res:Response) => {
+    private home = (req:Request, res:Response) => {
         const {sum, addons, base, allBases, allAddons} = this.cmapp.getCookieSettings(req);
 
         res.render('home/index', {
